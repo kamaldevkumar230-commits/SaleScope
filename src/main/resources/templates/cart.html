@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Your Cart - ShopEase</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+body {
+    background-color: #f3f6fb;
+    font-family: "Poppins", sans-serif;
+}
+.navbar {
+    background-color:#7D0552;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.navbar-brand {
+    font-weight: 700;
+    font-size: 28px;
+    color: #fff !important;
+}
+.nav-link {
+    color: #fff !important;
+    font-weight: 500;
+    margin-left: 12px;
+}
+.table {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.table th {
+    background-color: #2874f0;
+    color: white;
+}
+.btn-remove {
+    background-color: #dc3545;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    color: #fff;
+}
+.btn-checkout {
+    background: linear-gradient(90deg, #28a745, #218838);
+    border: none;
+    padding: 10px 20px;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 5px;
+}
+footer {
+    background-color: #172337;
+    color: #ddd;
+    padding: 20px;
+    text-align: center;
+    margin-top: 40px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🔷 Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark px-5">
+  <a class="navbar-brand" th:href="@{/}">SaleScope</a>
+  <div class="ms-auto">
+    <span class="text-white me-3">
+        👋 Hello,		<span class="fw-semibold"
+		      th:text="${userName != null and !userName.isEmpty()} ? ${userName} : 'Guest'">
+		</span>
+    </span>
+    <a th:href="@{/customer/dashboard}" class="nav-link d-inline">
+        <i class="fa fa-box"></i> Back
+    </a>
+    <a th:href="@{/logout}" class="nav-link d-inline">
+        <i class="fa fa-sign-out-alt"></i> Logout
+    </a>
+  </div>
+</nav>
+
+<!-- 🔷 Cart Content -->
+<div class="container mt-5 mb-5">
+  <h2 class="text-center fw-bold mb-4">🛒 Your Shopping Cart</h2>
+
+  <!-- If Cart Empty -->
+  <div th:if="${#lists.isEmpty(cart)}" class="text-center p-5 bg-white rounded shadow-sm">
+      <h4 class="text-muted mb-3">Your cart is empty 😔</h4>
+      <a th:href="@{/products}" class="btn btn-primary">Continue Shopping</a>
+  </div>
+
+  <!-- If Cart Not Empty -->
+  <div th:if="${!#lists.isEmpty(cart)}">
+
+    <table class="table table-striped shadow-sm">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th style="width:120px;">Price (₹)</th>
+          <th style="width:120px;">Quantity</th>
+          <th style="width:150px;">Total (₹)</th>
+          <th style="width:120px;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr th:each="ci : ${cart}">
+          <td>
+            <div class="d-flex align-items-center">
+              <img th:src="@{'/' + ${ci.product.image}}"
+                   onerror="this.src='https://via.placeholder.com/80x80?text=No+Image';"
+                   width="80" height="80" class="me-3 rounded">
+
+              <div>
+                <b th:text="${ci.product.name}"></b><br>
+                <small class="text-muted" th:text="${ci.product.category}"></small>
+              </div>
+            </div>
+          </td>
+
+          <td th:text="${ci.product.price}"></td>
+		  
+		  
+		  <td>
+		      <div class="d-flex align-items-center">
+
+		          <!-- Decrease -->
+		          <a th:href="@{/decrease-qty(productId=${ci.product.id})}"
+		             class="btn btn-sm btn-danger me-2">-</a>
+
+		          <span class="fw-bold" th:text="${ci.quantity}"></span>
+
+		          <!-- Increase -->
+		          <a th:href="@{/increase-qty(productId=${ci.product.id})}"
+		             class="btn btn-sm btn-success ms-2">+</a>
+
+		      </div>
+		  </td>
+		  
+		  
+		  
+          <td><b th:text="${ci.totalPrice}"></b></td>
+
+          <td>
+            <a th:href="@{/remove-from-cart(productId=${ci.product.id})}" class="btn-remove">
+              <i class="fa fa-trash"></i> Remove
+            </a>
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="3" class="text-end fw-bold">Grand Total:</td>
+          <td colspan="2" class="fw-bold text-success">
+            ₹ <span th:text="${grandTotal}"></span>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <div class="text-end mt-3">
+      <a th:href="@{/address}" class="btn-checkout">
+        <i class="fa fa-credit-card"></i> Proceed to Checkout
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 ShopEase Inc. | Built with ❤️ by Kamaldev Kumar</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>My Orders | SaleScope</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+
+<style>
+body{background:#f5f8ff;font-family:Poppins;}
+.navbar{background:#7D0552;}
+.page-header{text-align:center;margin-top:80px;margin-bottom:40px;}
+.order-table{width:100%;background:#fff;border-radius:15px;box-shadow:0 4px 10px rgba(0,0,0,0.08);}
+.order-table th, .order-table td{padding:15px;text-align:center;}
+.order-table thead{background:#0d6efd;color:#fff;}
+.status{font-weight:600;}
+.status.placed{color:#ffc107;}
+.status.cancelled{color:#dc3545;}
+footer{background:#172337;color:#ccc;text-align:center;padding:25px;margin-top:60px;}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+<div class="container-fluid px-4">
+<a class="navbar-brand fw-bold" th:href="@{/}">SaleScope</a>
+</div>
+</nav>
+
+<div class="page-header">
+<h2>My Orders</h2>
+<p class="text-muted">All your orders in one place</p>
+</div>
+
+<div class="container">
+
+<div th:if="${orders != null and !#lists.isEmpty(orders)}">
+
+<table class="order-table table">
+<thead>
+<tr>
+<th>Order ID</th>
+<th>Total</th>
+<th>Status</th>
+<th>Date</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr th:each="o : ${orders}">
+
+<td th:text="${o.id}"></td>
+
+<td th:text="'₹ ' + ${o.totalAmount}"></td>
+
+<td>
+<span class="status"
+      th:classappend="${o.status.toLowerCase()}">
+<i class="fa fa-circle-check"></i>
+<span th:text="${o.status}"></span>
+</span>
+</td>
+
+<td th:text="${#temporals.format(o.orderDate,'dd MMM yyyy HH:mm')}"></td>
+
+<td>
+<form th:if="${o.status == 'PLACED'}"
+      th:action="@{/customer/cancel-order}"
+      method="post">
+<input type="hidden" name="orderId" th:value="${o.id}">
+<button class="btn btn-danger btn-sm">
+<i class="fa fa-times"></i> Cancel
+</button>
+</form>
+
+<button th:if="${o.status != 'PLACED'}"
+        class="btn btn-success btn-sm" disabled>
+<i class="fa fa-check"></i>
+<span th:text="${o.status}"></span>
+</button>
+</td>
+
+</tr>
+
+</tbody>
+</table>
+
+</div>
+
+<div th:if="${orders == null or #lists.isEmpty(orders)}"
+     class="text-center text-muted mt-5">
+<i class="fa fa-box-open fa-3x mb-3"></i>
+<h5>No Orders Found!</h5>
+</div>
+
+</div>
+
+<footer>
+© 2025 SaleScope | Designed by Kamaldev Kumar
+</footer>
+
+</body>
+</html>
