@@ -6,6 +6,7 @@ import com.salescope.entity.Order;   // ✅ Correct import
 import com.salescope.repository.OrderRepository;  // ✅ Important
 import com.salescope.repository.ProductRepository;
 import com.salescope.repository.UserRepository;
+import com.salescope.service.ImageUploadService;
 import com.salescope.service.ProductService;
 
 import jakarta.persistence.criteria.Path;
@@ -29,6 +30,9 @@ import java.util.List;
 @Controller
 public class CustomerController {
 
+	@Autowired
+	private ImageUploadService imageUploadService;
+	
     @Autowired
     private ProductService productService;
 
@@ -116,12 +120,11 @@ public class CustomerController {
     
     
     @PostMapping("/customerprofile")
-    public String updateProfileImage(@RequestParam("profileImage") MultipartFile file,
-                                     HttpSession session) {
+    public String updateProfileImage(
+            @RequestParam("profileImage") MultipartFile file,
+            HttpSession session) {
 
         User user = (User) session.getAttribute("currentUser");
-        
-     
 
         if (user == null) {
             return "redirect:/login";
@@ -130,19 +133,16 @@ public class CustomerController {
         try {
             if (!file.isEmpty()) {
 
-                String uploadDir = System.getProperty("user.home") + "/salescope/uploads/profile/";
-                File dir = new File(uploadDir);
-                if (!dir.exists()) dir.mkdirs();
+                // 🔥 Upload to Cloudinary
+                String imageUrl = imageUploadService.uploadImage(file);
 
-                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                file.transferTo(new File(uploadDir + fileName));
-
-                user.setProfileImage("/uploads/profile/" + fileName);
+                // Save Cloud URL in DB
+                user.setProfileImage(imageUrl);
                 userRepository.save(user);
 
-                // 🔥 VERY IMPORTANT
+                // 🔥 Update session
                 session.setAttribute("currentUser", user);
-                session.setAttribute("profileImage", user.getProfileImage());
+                session.setAttribute("profileImage", imageUrl);
                 session.setAttribute("userName", user.getName());
             }
 
@@ -152,7 +152,6 @@ public class CustomerController {
 
         return "redirect:/customerprofile";
     }
-    
     
 	
     

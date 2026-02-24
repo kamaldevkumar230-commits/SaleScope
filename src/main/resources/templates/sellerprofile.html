@@ -78,15 +78,21 @@ input[type="file"] {
 
 <div class="profile-card" th:if="${currentUser != null}">
 
-    <!-- Profile Image -->
-    <div class="profile-img-wrapper">
+	<!-- Profile Image -->
+	<div class="profile-img-wrapper">
 
-		<img th:if="${currentUser.profileImage != null}"
-		     th:src="@{'/' + ${currentUser.profileImage}}"
-		     class="profile-img">
-			
-        <i class="fa fa-camera camera-icon" onclick="triggerUpload()"></i>
-    </div>
+	    <!-- Cloud Image -->
+	    <img th:if="${currentUser.profileImage != null and !currentUser.profileImage.isEmpty()}"
+	         th:src="${currentUser.profileImage}"
+	         class="profile-img">
+
+	    <!-- Default Image -->
+	    <img th:if="${currentUser.profileImage == null or currentUser.profileImage.isEmpty()}"
+	         th:src="@{/images/user.png}"
+	         class="profile-img">
+
+	    <i class="fa fa-camera camera-icon" onclick="triggerUpload()"></i>
+	</div>
 
     <!-- Upload Form -->
     <form th:action="@{/seller/profile}" method="post" enctype="multipart/form-data">

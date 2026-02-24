@@ -91,11 +91,13 @@ input[type="file"] {
     <!-- Profile Image -->
     <div class="profile-img-wrapper">
 
-		<img th:src="${currentUser.profileImage != null} 
-		              ? @{${currentUser.profileImage}} 
-		              : @{/images/default.png}"
+		<img th:if="${currentUser.profileImage != null and !currentUser.profileImage.isEmpty()}"
+		     th:src="${currentUser.profileImage}"
 		     class="profile-img">
 
+		<img th:if="${currentUser.profileImage == null or currentUser.profileImage.isEmpty()}"
+		     th:src="@{/images/user.png}"
+		     class="profile-img">
         <i class="fa fa-camera camera-icon" onclick="triggerUpload()"></i>
     </div>
 

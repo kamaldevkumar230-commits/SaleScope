@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
+
 @Controller
 public class SellerController {
 
@@ -22,14 +23,17 @@ public class SellerController {
         String role = (String) session.getAttribute("role");
         Long sellerId = (Long) session.getAttribute("userId");
 
-        if (role == null || !role.equalsIgnoreCase("seller") || sellerId == null) {
+        if (!"seller".equalsIgnoreCase(role) || sellerId == null) {
             return "redirect:/login?error=loginfirst";
         }
 
         List<Product> products = productService.getProductsBySeller(sellerId);
+
         model.addAttribute("products", products);
         model.addAttribute("userName", session.getAttribute("userName"));
-        model.addAttribute("profileImg", session.getAttribute("profileImage"));
+
+        Object profileImg = session.getAttribute("profileImage");
+        model.addAttribute("profileImg", profileImg != null ? profileImg.toString() : "");
 
         return "seller_dashbord";
     }

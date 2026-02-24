@@ -2,6 +2,7 @@ package com.salescope.controller;
 
 import com.salescope.entity.User;
 import com.salescope.repository.UserRepository;
+import com.salescope.service.ImageUploadService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,9 @@ public class SellerProfileController {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private ImageUploadService imageUploadService;
 
     // 🔹 Open Seller Profile
     @GetMapping("/profile")   // 🔥 ONLY profile here
@@ -34,37 +38,34 @@ public class SellerProfileController {
         return "sellerprofile";   // template name
     }
 
-    // 🔹 Update Profile Image
     @PostMapping("/profile")
-    public String updateSellerProfileImage(@RequestParam("profileImage") MultipartFile file,
-                                           HttpSession session) {
+    public String updateSellerProfileImage(
+            @RequestParam("profileImage") MultipartFile file,
+            HttpSession session) {
 
         User user = (User) session.getAttribute("currentUser");
 
-        if(user == null) {
+        if (user == null) {
             return "redirect:/login";
         }
 
         try {
-            if(!file.isEmpty()) {
+            if (!file.isEmpty()) {
 
-                String uploadDir = System.getProperty("user.home") + "/salescope/uploads/profile/";
-                File dir = new File(uploadDir);
-                if(!dir.exists()) dir.mkdirs();
+                // 🔥 Upload to Cloudinary
+                String imageUrl = imageUploadService.uploadImage(file);
 
-                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                file.transferTo(new File(uploadDir + fileName));
-
-                user.setProfileImage("uploads/profile/" + fileName);
+                // Save Cloud URL
+                user.setProfileImage(imageUrl);
                 userRepository.save(user);
 
                 session.setAttribute("currentUser", user);
             }
 
-        } catch(IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return "redirect:/seller/profile";  // 🔥 FIXED redirect
+        return "redirect:/seller/profile";
     }
 }
