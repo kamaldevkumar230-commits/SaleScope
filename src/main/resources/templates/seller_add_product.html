@@ -13,6 +13,24 @@ body{
   font-family: 'Poppins', sans-serif;
 }
 
+/* NAVBAR */
+      .navbar {
+          background-color: #1B262C;
+      }
+
+      .navbar-brand span:first-child {
+          color: #FFD369;
+          font-weight: 700;
+      }
+
+      .navbar-brand span:last-child {
+          color: #ffffff;
+          font-weight: 700;
+      }
+
+
+
+
 .form-card{
   max-width:650px;
   margin:60px auto;
@@ -39,6 +57,51 @@ body{
 </style>
 </head>
 <body>
+	
+
+	<!-- NAVBAR -->
+	<nav class="navbar navbar-expand-lg navbar-dark px-3">
+	    <div class="container-fluid">
+
+	        <!-- LOGO -->
+	        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+	            <img th:src="@{/images/logo2.png}" width="38" height="38" class="me-2">
+	            <span>Sale</span><span>Scope</span>
+	        </a>
+
+	        <!-- TOGGLE (Mobile) -->
+	        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+	                data-bs-target="#navbarContent">
+	            <span class="navbar-toggler-icon"></span>
+	        </button>
+
+	        <div class="collapse navbar-collapse" id="navbarContent">
+
+
+	            <!-- RIGHT LINKS -->
+	            <ul class="navbar-nav ms-auto">
+	                <li class="nav-item">
+	                    <a th:href="@{/logout}" class="nav-link text-white">
+	                        <i class="fa fa-user"></i> Logout
+	                    </a>
+	                </li>
+	                <li class="nav-item">
+	                    <a th:href="@{/register}" class="nav-link text-white">
+	                        <i class="fa fa-user-plus"></i> Back
+	                    </a>
+	                </li>
+	                <li class="nav-item">
+	                    <a th:href="@{/help}" class="nav-link text-white">
+	                        <i class="fa-solid fa-circle-question"></i> Help
+	                    </a>
+	                </li>
+	            </ul>
+
+	        </div>
+	    </div>
+	</nav>
+
+	
 
 <div class="form-card">
 

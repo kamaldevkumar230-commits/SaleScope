@@ -43,23 +43,71 @@ body {
     padding: 10px;
 }
 .btn-register:hover { background-color: #1a5edb; }
+
+/* NAVBAR */
+      .navbar {
+          background-color: #1B262C;
+      }
+
+      .navbar-brand span:first-child {
+          color: #FFD369;
+          font-weight: 700;
+      }
+
+      .navbar-brand span:last-child {
+          color: #ffffff;
+          font-weight: 700;
+      }
+
+
+
 </style>
 </head>
 
 <body>
 
-<!-- 🔹 Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-  <div class="container-fluid px-4">
-    <a class="navbar-brand" th:href="@{/}">
-      <i class="fa fa-cart-shopping me-2"></i>SaleScope
-    </a>
-    <div class="ms-auto">
-      <a th:href="@{/}" class="nav-link d-inline-block me-3">Home</a>
-      <a th:href="@{/login}" class="nav-link d-inline-block">Login</a>
-    </div>
-  </div>
-</nav>
+	<!-- NAVBAR -->
+		<nav class="navbar navbar-expand-lg navbar-dark px-3">
+		    <div class="container-fluid">
+
+		        <!-- LOGO -->
+		        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+		            <img th:src="@{/images/logo2.png}" width="38" height="38" class="me-2">
+		            <span>Sale</span><span>Scope</span>
+		        </a>
+
+		        <!-- TOGGLE (Mobile) -->
+		        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+		                data-bs-target="#navbarContent">
+		            <span class="navbar-toggler-icon"></span>
+		        </button>
+
+		        <div class="collapse navbar-collapse" id="navbarContent">
+
+
+		            <!-- RIGHT LINKS -->
+		            <ul class="navbar-nav ms-auto">
+		                <li class="nav-item">
+		                    <a th:href="@{/login}" class="nav-link text-white">
+		                        <i class="fa fa-user"></i> Login
+		                    </a>
+		                </li>
+		                <li class="nav-item">
+		                    <a th:href="@{/}" class="nav-link text-white">
+		                        <i class="fa fa-user-plus"></i> Back
+		                    </a>
+		                </li>
+		                <li class="nav-item">
+		                    <a th:href="@{/help}" class="nav-link text-white">
+		                        <i class="fa-solid fa-circle-question"></i> Help
+		                    </a>
+		                </li>
+		            </ul>
+
+		        </div>
+		    </div>
+		</nav>
+
 
 <!-- 🔸 Registration Form -->
 <div class="register-card">
